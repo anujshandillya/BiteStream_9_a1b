@@ -1,10 +1,12 @@
+*.DS_Store
+
+# Assignment 1
 .venv/
 venv/
 __pycache__/
 *.pyc
 .env
 .DS_Store
-
 *.csv
 *.dump
 *.backup
