@@ -42,6 +42,9 @@ distributions before touching anything.
 | `mongo/01..03` | Renamed to `Menus` / `Reviews` / `DriverPings`, added `$jsonSchema` validators, WF3 starts from a real restaurant's location and groups by driver, WF4 uses a valid sample ID. | Spec |
 | `docs/`, `performance/`, `README.md` | Regenerated the ERD (PNG + SVG), the Mongo schema map and the EXPLAIN / executionStats evidence for the fixed schema, added `performance/generate_reports.sh` to regenerate them, and rewrote the README setup. | Keep the documentation and evidence in line with the fixes |
 
+**Later, during integration with our API/UI:** a `mv_refresh_log` table so "last refreshed" is
+stored in the database, a live driver-ping generator for the map, and amount-limit / time-zone fixes.
+
 Unchanged on purpose: the table DDL, the trigger, the partial index, the WF2 query, the WF4
 pipeline and the original daily MV. They already met the spec.
 
