@@ -91,6 +91,32 @@ CALL sp_execute_checkout('<user_uuid>', '<restaurant_uuid>', 250.00);   -- retur
 
 Errors: `P0001` insufficient balance · `23505` user already has an active order · `22023` amount ≤ 0 · `23503` unknown user/restaurant · `40001` concurrent checkout (retry).
 
+## Screenshots
+
+### Browse
+
+![Browse screen](docs/screenshots/browse.png)
+
+### Checkout
+
+![Checkout screen](docs/screenshots/checkout.png)
+
+### Wallet audit
+
+![Wallet audit screen](docs/screenshots/wallet_audit.png)
+
+### Analytics
+
+![Analytics screen](docs/screenshots/revenue_analytics.png)
+
+### Drivers
+
+![Nearby drivers screen](docs/screenshots/live_drivers.png)
+
+### Reviews
+
+![Reviews screen](docs/screenshots/reviews.png)
+
 ## Tests
 
 ```bash
