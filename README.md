@@ -1,13 +1,10 @@
 # 9_a1b: BiteStream (Team 9)
 
-**Repository:** https://github.com/anujshandillya/BiteStream_9_a1b
-**Final commit hash:** _TODO (fill in at submission)_
+**Repository:** https://github.com/anujshandillya/BiteStream_9_a1b  
+**Final commit hash:** _TODO (fill in at submission)_  
 **Demo video:** _TODO_
 
-CS6.302 Software System Development, Assignment 1B (Front End Design). We inherited another
-team's Assignment 1 database for **Project 1: BiteStream** (food delivery + real-time driver
-logistics, on PostgreSQL + MongoDB), verified and fixed it, and are building an API and web front
-end on top.
+CS6.302 Software System Development, Assignment 1B (Front End Design). We inherited another team's Assignment 1 database for **Project 1: BiteStream** (food delivery + real-time driver logistics, on PostgreSQL + MongoDB), verified and fixed it, and are building an API and web front end on top.
 
 | Doc | What's in it |
 |---|---|
@@ -15,8 +12,8 @@ end on top.
 | [`docs/relational_erd.png`](docs/relational_erd.png) | PostgreSQL ERD |
 | [`docs/mongo_schema_map.json`](docs/mongo_schema_map.json) | MongoDB document structures, validators, indexes |
 | [`performance/`](performance/) | Raw `EXPLAIN (ANALYZE, BUFFERS)` and `explain("executionStats")` output + the script that regenerates it |
-| `docs/api_endpoints.md` | API endpoint list (_TODO: Vedant_) |
-| `docs/design/` | Users, wireframes, style guide (_TODO: Anuj_) |
+| [`docs/api_endpoints.md`](docs/api_endpoints.md) | API endpoint and request/response contract |
+| [`docs/design/`](docs/design/) | User goals and screen wireframes/design references |
 
 ## Repository structure
 
@@ -33,12 +30,9 @@ end on top.
 
 ## Setup (Docker, recommended)
 
-`docker compose watch` runs PostgreSQL 18, MongoDB 7, the API (FastAPI, port 8000), the web app
-(Vite, port 5173) and a live driver-ping generator. On a fresh volume, Postgres runs `sql/` and Mongo
-runs `mongo/01_collections_and_indexes.js` automatically. **Seeding is a separate step** (below).
+`docker compose watch` runs PostgreSQL 18, MongoDB 7, the API (FastAPI, port 8000), the web app (Vite, port 5173) and a live driver-ping generator. On a fresh volume, Postgres runs `sql/` and Mongo runs `mongo/01_collections_and_indexes.js` automatically. **Seeding is a separate step** (below).
 
-**Prerequisites:** Docker Desktop (running), Python 3.10+ for the seeders. Ports 5432, 27017, 8000
-and 5173 must be free (stop a local Postgres / MongoDB if you have one, e.g. `brew services stop postgresql@18`).
+**Prerequisites:** Docker Desktop (running), Python 3.10+ for the seeders. Ports 5432, 27017, 8000 and 5173 must be free (stop a local Postgres / MongoDB if you have one, e.g. `brew services stop postgresql@18`).
 
 ```bash
 # 1. Configuration (compose and the seeders both read .env)
@@ -61,20 +55,13 @@ cd data_generation
 cd ..
 ```
 
-Open **http://localhost:5173** (web) · **http://localhost:8000/docs** (API docs) ·
-**http://localhost:8000/api/health** (health check).
+Open **http://localhost:5173** (web) · **http://localhost:8000/docs** (API docs) · **http://localhost:8000/api/health** (health check).
 
-- **Database already initialised from older `sql/` files?** Init scripts only run on an empty volume.
-  Either reset (`docker compose down -v`, then steps 3–4), or apply the changed file in place:
+- **Database already initialised from older `sql/` files?** Init scripts only run on an empty volume. Either reset (`docker compose down -v`, then steps 3–4), or apply the changed file in place:
   `docker compose exec postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/05_materialized_views.sql'`.
-- **Live driver pings:** the `live-pings` service inserts 150 drivers' positions every 5 s, so the map
-  always has fresh, moving drivers (`LIVE_PINGS_INTERVAL` / `LIVE_PINGS_DRIVERS` in `.env` to tune;
-  `docker compose logs -f live-pings` to watch). Without Docker: `cd data_generation && .venv/bin/python live_pings.py`.
+- **Live driver pings:** the `live-pings` service inserts 150 drivers' positions every 5 s, so the map always has fresh, moving drivers (`LIVE_PINGS_INTERVAL` / `LIVE_PINGS_DRIVERS` in `.env` to tune; `docker compose logs -f live-pings` to watch). Without Docker: `cd data_generation && .venv/bin/python live_pings.py`.
 
-**Without Docker:** install PostgreSQL 14+ and MongoDB 7+ locally, set `.env` to your local user, then
-`createdb bitestream`, `for f in sql/0[1-5]*.sql; do psql -v ON_ERROR_STOP=1 -d bitestream -f "$f"; done`,
-`mongosh mongo/01_collections_and_indexes.js`, and run the four seeders as above. Run the API from `api/`
-(`uvicorn main:app --port 8000`) and the web app from `web/` (`yarn dev`).
+**Without Docker:** install PostgreSQL 14+ and MongoDB 7+ locally, set `.env` to your local user, then `createdb bitestream`, `for f in sql/0[1-5]*.sql; do psql -v ON_ERROR_STOP=1 -d bitestream -f "$f"; done`, `mongosh mongo/01_collections_and_indexes.js`, and run the four seeders as above. Run the API from `api/` (`uvicorn main:app --port 8000`) and the web app from `web/` (`yarn dev`).
 
 **Run the workflows / evidence directly** (with the local tools, or via `docker compose exec`):
 
@@ -85,9 +72,7 @@ mongosh mongo/03_workflow4_facet.js                 # WF4
 bash performance/generate_reports.sh                # EXPLAIN / executionStats files
 ```
 
-**Expected data (default flags):** 5,000 users · 200 restaurants · 100,300 orders (100,000
-DELIVERED + ~188 PREPARING + ~112 DELIVERING) · 129,966 wallet audit rows · 200 menus · 110,000
-reviews · 510,000 seeded driver pings (plus the live ones).
+**Expected data (default flags):** 5,000 users · 200 restaurants · 100,300 orders (100,000 DELIVERED + ~188 PREPARING + ~112 DELIVERING) · 129,966 wallet audit rows · 200 menus · 110,000 reviews · 510,000 seeded driver pings (plus the live ones).
 
 **Demo fixtures (fixed IDs on every machine):**
 
@@ -98,15 +83,13 @@ reviews · 510,000 seeded driver pings (plus the live ones).
 | Demo User (Low Balance) | `00000000-0000-4000-8000-000000000002` | ₹45, so checkout fails: insufficient balance |
 | Demo User (Active Order) | `00000000-0000-4000-8000-000000000003` | has a PREPARING order, so checkout fails: active order |
 
-**Workflow 1 (checkout)** must be called in **autocommit mode** (not inside `BEGIN … COMMIT`),
-because the procedure manages its own REPEATABLE READ transaction (the API does this):
+**Workflow 1 (checkout)** must be called in **autocommit mode** (not inside `BEGIN … COMMIT`), because the procedure manages its own REPEATABLE READ transaction (the API does this):
 
 ```sql
 CALL sp_execute_checkout('<user_uuid>', '<restaurant_uuid>', 250.00);   -- returns p_order_id
 ```
 
-Errors: `P0001` insufficient balance · `23505` user already has an active order · `22023` amount ≤ 0 ·
-`23503` unknown user/restaurant · `40001` concurrent checkout (retry).
+Errors: `P0001` insufficient balance · `23505` user already has an active order · `22023` amount ≤ 0 · `23503` unknown user/restaurant · `40001` concurrent checkout (retry).
 
 ## Tests
 
@@ -126,8 +109,7 @@ cd web && node --test tests/*.test.mjs
 
 ## Database: performance proof (EXPLAIN)
 
-Full raw output: [`performance/postgres_explain_analyzes.txt`](performance/postgres_explain_analyzes.txt),
-[`performance/mongo_execution_stats.json`](performance/mongo_execution_stats.json).
+Full raw output: [`performance/postgres_explain_analyzes.txt`](performance/postgres_explain_analyzes.txt), [`performance/mongo_execution_stats.json`](performance/mongo_execution_stats.json).
 
 | Query | Plan | Time |
 |---|---|---|
@@ -182,12 +164,39 @@ Summary below; the reasons and evidence are in [`docs/handover_note.md`](docs/ha
 
 ## Tech choices
 
-_TODO: API / web framework choices and justification (Vedant, Anuj)._
+| Layer | Choice | Why it fits BiteStream |
+|---|---|---|
+| Front end | **React** | Component-based UI lets the six workflows share reusable controls for pagination, forms, status badges, loading/error states, and data panels. |
+| Front-end tooling | **Vite** | Provides a fast development server and a straightforward production build, while keeping the browser app separate from the API. |
+| Styling | **CSS (project stylesheets)** | Keeps the visual system lightweight and lets the team define consistent colours, typography, spacing, and responsive layouts without adding a UI-framework dependency. |
+| API | **FastAPI (Python)** | Gives the browser a small HTTP/JSON layer, request validation, clear error responses, and automatically generated API documentation at `/docs`. |
+| PostgreSQL access | **Psycopg 3 + connection pool** | Uses PostgreSQL directly and supports the inherited SQL schema, checkout stored procedure, audit trail, analytics queries, and materialized-view refresh functions. |
+| MongoDB access | **PyMongo** | Calls the inherited MongoDB workflows for nearby drivers (`$geoNear`), review analytics (`$facet`), and menu documents. |
+| Data stores | **PostgreSQL + MongoDB** | Preserves the inherited Assignment 1 data model: relational transactional/audit data stays in PostgreSQL, while driver pings, reviews, and menus use MongoDB documents and geospatial queries. |
+| Tests | **pytest + Node.js built-in test runner** | Tests API workflows against the running stack and checks front-end/API response contracts and validation without requiring a separate test framework for the web tests. |
+
+The API is intentionally a **thin middleware layer**: transaction rules, audit-trigger behaviour, window analytics, materialized-view logic, and MongoDB aggregation logic remain in the database rather than being duplicated in Python or the browser.
+
+## Running-application screenshots
+
+Capture screenshots from the **running application** and save them under `docs/screenshots/` using the filenames below. These must be real application captures, not the design wireframes in `docs/design/`.
+
+| Screen | Screenshot file | What to show |
+|---|---|---|
+| Browse | `docs/screenshots/01-browse.png` | Entity list, search/filter, pagination, and a detail view if available |
+| Checkout | `docs/screenshots/02-checkout.png` | Checkout form and a successful result with before/after balance and audit entry |
+| Wallet audit | `docs/screenshots/03-wallet-audit.png` | Selected user, date filter, audit entries, and balance values |
+| Analytics | `docs/screenshots/04-analytics.png` | Moving-average chart, ranking, summary, and refresh information |
+| Driver map | `docs/screenshots/05-drivers.png` | Selected origin, nearby drivers, distances, and map/ping display |
+| Reviews | `docs/screenshots/06-reviews.png` | Rating distribution, top tags, average rating, and menu/catalog details |
+
+After adding the image files, embed them here with Markdown image links so they render in GitHub's README. Capture success and failure states where practical; do not show credentials, `.env` contents, or other secrets.
 
 ## Team and contributions
 
 | Member | Role | Contributions |
 |---|---|---|
-| Aditya Chintala | Database verification & fixes | Verified the inherited DB against the A1 spec; seeders; procedure / MV / index / Mongo fixes; ERD, schema map, performance evidence, handover note |
-| Vedant Bhatt | Backend / API | _TODO_ |
-| Anuj Sharma | Frontend | _TODO_ |
+| Aditya Chintala | Database verification & fixes | Verified the inherited database against the Assignment 1 specification; updated the seeders and database objects; fixed stored-procedure, materialized-view, index, and MongoDB workflow behaviour; prepared the ERD, MongoDB schema map, performance evidence, database guide, and handover note. |
+| Vedant Bhatt | Backend / API | Implemented the FastAPI middleware in `api/`; connected PostgreSQL and MongoDB operations to HTTP endpoints; added request validation and consistent API error responses; exposed browse, checkout, wallet top-up/audit, analytics, nearby-driver, and review/menu functionality; documented the API contract in `docs/api_endpoints.md` and contributed API tests. |
+| Anuj Sharma | Frontend / design | Implemented the React/Vite interface in `web/` for Browse, Checkout, Wallet Audit, Analytics, Drivers/Map, and Reviews; connected screens to the API; prepared user goals and screen design materials in `docs/design/`. |
+| All active team members | Integration & submission | Coordinated the API/database/UI contract, tested the integrated application, and contributed to final README and submission checks. |
