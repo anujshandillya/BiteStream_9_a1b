@@ -1,13 +1,37 @@
 *.DS_Store
-# Python
+# Python(api)
 .venv/
 __pycache__/
 .env
 
+# Frontend(web)
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+*/node_modules
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Assignment 1
 venv/
 *.pyc
-.DS_Store
 *.csv
 *.dump
 *.backup
