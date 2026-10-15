@@ -179,8 +179,6 @@ The API is intentionally a **thin middleware layer**: transaction rules, audit-t
 
 ## Running-application screenshots
 
-Capture screenshots from the **running application** and save them under `docs/screenshots/` using the filenames below. These must be real application captures, not the design wireframes in `docs/design/`.
-
 | Screen | Screenshot file | What to show |
 |---|---|---|
 | Browse | `docs/screenshots/01-browse.png` | Entity list, search/filter, pagination, and a detail view if available |
