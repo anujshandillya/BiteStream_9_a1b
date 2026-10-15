@@ -177,19 +177,6 @@ Summary below; the reasons and evidence are in [`docs/handover_note.md`](docs/ha
 
 The API is intentionally a **thin middleware layer**: transaction rules, audit-trigger behaviour, window analytics, materialized-view logic, and MongoDB aggregation logic remain in the database rather than being duplicated in Python or the browser.
 
-## Running-application screenshots
-
-| Screen | Screenshot file | What to show |
-|---|---|---|
-| Browse | `docs/screenshots/01-browse.png` | Entity list, search/filter, pagination, and a detail view if available |
-| Checkout | `docs/screenshots/02-checkout.png` | Checkout form and a successful result with before/after balance and audit entry |
-| Wallet audit | `docs/screenshots/03-wallet-audit.png` | Selected user, date filter, audit entries, and balance values |
-| Analytics | `docs/screenshots/04-analytics.png` | Moving-average chart, ranking, summary, and refresh information |
-| Driver map | `docs/screenshots/05-drivers.png` | Selected origin, nearby drivers, distances, and map/ping display |
-| Reviews | `docs/screenshots/06-reviews.png` | Rating distribution, top tags, average rating, and menu/catalog details |
-
-After adding the image files, embed them here with Markdown image links so they render in GitHub's README. Capture success and failure states where practical; do not show credentials, `.env` contents, or other secrets.
-
 ## Team and contributions
 
 | Member | Role | Contributions |
